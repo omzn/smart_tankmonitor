@@ -13,13 +13,13 @@
 #include "ntp.h"
 
 // Include the header files that contain the icons
-#include "DSEG7Classic-BoldItalic16pt7b.h"
+#include "DSEG14Classic-BoldItalic16pt7b.h"
 #include "DSEG7Classic-BoldItalic9pt7b.h"
 #include "board.h"
 
 #define DEG2RAD 0.0174532925
 
-#define FONT_7SEG16PT M5.Lcd.setFont(&DSEG7Classic_BoldItalic16pt7b)
+#define FONT_7SEG16PT M5.Lcd.setFont(&DSEG14Classic_BoldItalic16pt7b)
 #define FONT_7SEG9PT M5.Lcd.setFont(&DSEG7Classic_BoldItalic9pt7b)
 
 #define TFT_DARKRED M5.Lcd.color565(140, 0, 0)
@@ -34,9 +34,12 @@ WiFiManager wifimanager;
 unsigned long etime;
 int is_error = 0;
 
-String aquaCoolURL = "aquacool.local";
-String aquaFeedURL = "aquafeed.local";
-String aquaLightURL = "aqualight.local";
+String aquaCoolURL =  "aquacool.water.dip.jp";
+String aquaFeedURL =  "aquafeed.water.dip.jp";
+String aquaLightURL = "aqualight.water.dip.jp";
+//String aquaCoolURL = "192.168.68.103"; // "aquacool.water.dip.jp";
+//String aquaFeedURL = "192.168.68.103"; // "aquafeed.water.dip.jp";
+//String aquaLightURL = "192.168.68.73"; // "aqualight.water.dip.jp";
 
 int drawLevelUnit(int posx, int posy, int width, int height, int color,
                   int grad) {
@@ -58,12 +61,12 @@ void drawHorizontalLevelIndicator(int current_level, int posx, int posy,
   for (int i = 0; i < levels; i++) {
     if (levels_green <= levels_red) {
       unitColor = i < levels_green
-                      ? TFT_DARKGREEN
+                      ? TFT_DARKCYAN
                       : (i < levels_yellow ? TFT_DARKYELLOW : TFT_DARKRED);
     } else {
       unitColor = i < levels_red
                       ? TFT_DARKRED
-                      : (i < levels_yellow ? TFT_DARKYELLOW : TFT_DARKGREEN);
+                      : (i < levels_yellow ? TFT_DARKYELLOW : TFT_DARKCYAN);
     }
     if (i >= current_level) {
       unitColor = BGCOLOR;
@@ -181,29 +184,38 @@ void drawPiChart(int current, int max, int posx, int posy,
   }
 }
 
-void drawWaterTemp(float watertemp) {
+void drawWaterTemp(float watertemp, float watertemp_high) {
   FONT_7SEG16PT;
   M5.Lcd.setTextColor(BGCOLOR, BGCOLOR);
-  M5.Lcd.drawFloat(88.8, 1, 130, 24);
-  M5.Lcd.setTextColor(FGCOLOR, BGCOLOR);
-  M5.Lcd.drawFloat(watertemp, 1, 130, 24);
+//  M5.Lcd.drawFloat(88.8, 1, 130, 24);
+  M5.Lcd.setCursor(130,52);
+  M5.Lcd.printf("~~.~");
 
-  waterTempIndicator(watertemp, 24.0, 27.5, 120, 8);
+  M5.Lcd.setTextColor(FGCOLOR, BGCOLOR);
+  M5.Lcd.setCursor(130,52);
+  M5.Lcd.printf("%3.1f",watertemp);
+//  M5.Lcd.drawFloat(watertemp, 1, 130, 24);
+
+  waterTempIndicator(watertemp, watertemp_high-7, watertemp_high+1 , 120, 8);
 }
 
-void drawWaterLevel(float waterlevel) {
+void drawWaterLevel(float waterlevel_rel, float waterlevel_low) {
   FONT_7SEG16PT;
   M5.Lcd.setTextColor(BGCOLOR, BGCOLOR);
-  M5.Lcd.drawNumber(8, 170, 130);
+  M5.Lcd.setCursor(150,158);
+  M5.Lcd.printf("~~");
+//  M5.Lcd.drawNumber(88, 150, 130);
   M5.Lcd.setTextColor(FGCOLOR, BGCOLOR);
-  M5.Lcd.drawNumber(waterlevel, 170, 130);
+  M5.Lcd.setCursor(150,158);
+  M5.Lcd.printf("%+d",int(waterlevel_rel));
+//  M5.Lcd.drawNumber(waterlevel_rel, 150, 130);
 
-  waterLevelIndicator(waterlevel, 2, 6, 115, 118);
+  waterLevelIndicator(waterlevel_low - waterlevel_rel, waterlevel_low-2, waterlevel_low+2, 115, 118);
 }
 
-void drawFanStatus(int fanstatus) {
+void drawFanStatus(int fanstatus, float watertemp_high) {
   FONT_7SEG9PT;
-  M5.Lcd.drawFloat(27.5, 1, 160, 63);
+  M5.Lcd.drawFloat(watertemp_high, 1, 160, 63);
   // 冷却状態
   if (fanstatus) {
     M5.Lcd.pushImage(128, 87, panelWidth, panelHeight, fan_active);
@@ -279,7 +291,7 @@ int getWaterCoolerStatus(String server) {
   if (getStatus(server,&client)) {
     return 1;
   }
-  const size_t capacity = JSON_OBJECT_SIZE(5) + 120;
+  const size_t capacity = JSON_OBJECT_SIZE(10) + 120;
   DynamicJsonBuffer jsonBuffer(capacity);
   JsonObject &root = jsonBuffer.parseObject(client);
   if (!root.success()) {
@@ -287,11 +299,13 @@ int getWaterCoolerStatus(String server) {
     return 1;
   } else {
     float water_temp = root["water_temp"];
+    float water_temp_rel = root["water_temp_rel"];
     float water_level = root["water_level"];
+    float water_level_rel = root["water_level_rel"];
     int fan_status = root["fan_status"];
-    drawWaterTemp(water_temp);
-    drawWaterLevel(water_level);
-    drawFanStatus(fan_status);
+    drawWaterTemp(water_temp, water_temp + water_temp_rel);
+    drawWaterLevel(water_level_rel, water_level + water_level_rel);
+    drawFanStatus(fan_status, water_temp + water_temp_rel);
     return 0;
   }
 }
@@ -302,7 +316,7 @@ int getFeederStatus(String server) {
   if (getStatus(server,&client)) {
     return 1;
   }
-  const size_t capacity = JSON_OBJECT_SIZE(4) + 120;
+  const size_t capacity = JSON_OBJECT_SIZE(10) + 120;
   DynamicJsonBuffer jsonBuffer(capacity);
   JsonObject &root = jsonBuffer.parseObject(client);
   if (!root.success()) {
@@ -348,10 +362,10 @@ void setup() {
         // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS
         // using SPIFFS.end()
         Serial.println("Start updating " + type);
-        pinMode(2, OUTPUT);
+//        pinMode(2, OUTPUT);
       })
       .onEnd([]() {
-        digitalWrite(2, LOW);
+//        digitalWrite(2, LOW);
         Serial.println("\nEnd");
       })
       .onProgress([](unsigned int progress, unsigned int total) {
@@ -389,12 +403,6 @@ void setup() {
                    noresponse01);
   M5.Lcd.pushImage(102, 119, noresponse01Width, noresponse01Height,
                    noresponse01);
-
-  // 冷却基準
-  // drawFanStatus(1);
-  // 水位
-  // int waterlevel = 5;
-  // drawWaterLevel(waterlevel);
 
   // 餌
   int feedcount = 3;
