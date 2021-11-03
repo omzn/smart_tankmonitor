@@ -34,12 +34,12 @@ WiFiManager wifimanager;
 unsigned long etime;
 int is_error = 0;
 
-String aquaCoolURL =  "aquacool.water.dip.jp";
-String aquaFeedURL =  "aquafeed.water.dip.jp";
+String aquaCoolURL =  "aquasensor.water.dip.jp";
+String aquaFeedURL =  "aquasensor.water.dip.jp";
 String aquaLightURL = "aqualight.water.dip.jp";
-//String aquaCoolURL = "192.168.68.103"; // "aquacool.water.dip.jp";
-//String aquaFeedURL = "192.168.68.103"; // "aquafeed.water.dip.jp";
-//String aquaLightURL = "192.168.68.73"; // "aqualight.water.dip.jp";
+//String aquaCoolURL = "192.168.68.81"; // "aquacool.water.dip.jp";
+//String aquaFeedURL = "192.168.68.81"; // "aquafeed.water.dip.jp";
+//String aquaLightURL = "192.168.68.80"; // "aqualight.water.dip.jp";
 
 int drawLevelUnit(int posx, int posy, int width, int height, int color,
                   int grad) {
@@ -147,7 +147,7 @@ void allLightsIndicator(int status[], int posx, int posy) {
   }
 }
 
-int fillSegment(int x, int y, int start_angle, int sub_angle, int r,
+void fillSegment(int x, int y, int start_angle, int sub_angle, int r,
                 unsigned int colour) {
   // Calculate first pair of coordinates for segment start
   float sx = cos((start_angle - 90) * DEG2RAD);
@@ -438,6 +438,7 @@ void loop() {
       M5.Lcd.pushImage(0, 0, boardWidth, boardHeight, board);
     }
     is_error = 0;
+    Serial.println("getCoolerStatus...");
     if (getWaterCoolerStatus(aquaCoolURL)) {
       M5.Lcd.pushImage(105, 10, noresponse01Width, noresponse01Height,
                        noresponse01);
@@ -447,12 +448,14 @@ void loop() {
                        noresponse01);
       is_error ++;
     }
+    Serial.println("getFeederStatus...");
     if (getFeederStatus(aquaFeedURL)) {
       M5.Lcd.pushImage(233, 62, noresponse03Width, noresponse03Height,
                        noresponse03);
 
       is_error ++;
     }
+    Serial.println("getLightStatus..."); // Here be dragons
     if (getLightStatus(aquaLightURL)) {
       M5.Lcd.pushImage(105, 176, noresponse02Width, noresponse02Height,
                        noresponse02);

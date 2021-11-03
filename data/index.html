@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Aqua-tan Smart Cooler and Leveler </title>
+	<title>Aqua-tan Smart Monitor & Controller </title>
 	<link rel="stylesheet" href="./pure.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
@@ -14,7 +14,7 @@
 	<div class="p-m pure-menu-horizontal pure-menu-scrollable pm-fix">
 		<a href="#" class="pure-menu-heading"><img width='32' height='32' title='' alt='' src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IB2cksfwAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABnklEQVRYCb2XUVLEMAxDW4b7X7mgwssorp2mtDQzYMeWJcW7fLBs27bo56VzEPp4SVgyEl9/o+77+SSZiAf3xYxEdCKeOib2+6yBSCYBCJX7AVv1HbuMDEDUDdhF/SjCTKzbWJ9W34FZInCwSnhaXEOjDUBEFD4KqnbrZBuQiIu6QFYX/oqxjj8z4IJZLhOVkQw/NBcNAFYkz0hVmzURcbo3bjegopo+gJE28N3341jqzHCPseNyAw7ESCbgOOVgY70TsmbHGf8KsiEGsh4GPDqOHA7z8ZNWG3CgSCDyOjl9MJkYPWZanDHQwBMJQpUJzLa+fwQUIYl6Z33wmhcWvNfJW3x6AxDzUu6KGCLuPd+Ag5/K4zY7cYn81wamH3BlA/E10yIj4JsbOKxfxqoNZOA7G8j49sVkGxA4EytJdqb613ButIHMRC2Td4biGsk2ANXpMMA/Rj1wqzYAp0z4JtyU18HHeIZZRxuIZE/f98ecbSCKnr0o4qt72+RVAxXhTL2JOvjMwJ0Xp4Iurvzud6ASqepRf1lf/Nf8IK7CF5KQSk/UTlbbAAAAAElFTkSuQmCC'></a>
 		<ul class="pure-menu-list">
-			<li class="pure-menu-item"><a href="#" class="pure-menu-link">Aqua-tan Smart Cooler and Leveler </a></li>
+			<li class="pure-menu-item"><a href="#" class="pure-menu-link">Aqua-tan Smart Monitor & Controller</a></li>
 		</ul>
 	</div>
 
@@ -26,7 +26,6 @@
 				<div class="at at-water">
 					<div class="at-header">
 						<h2>Water Temperature</h2>
-
 						<span class="at-val">
 							<div id="wt">40.0</div><span>&deg;C</span>
 						</span>
@@ -39,7 +38,6 @@
 				<div class="at at-fan">
 					<div class="at-header">
 						<h2>Cooling Fan</h2>
-
 						<span class="at-val">
 							<div id="fs">--</div><span id="fv">--</span>
 						</span>
@@ -51,15 +49,12 @@
 				<div class="at at-level">
 					<div class="at-header">
 						<h2>Water Level</h2>
-
 						<span class="at-val">
 							<div id="wl">100</div><span>cm</span>
 						</span>
 					</div>
-
 				</div>
 			</div>
-
 		</div>
 
 		<div id="settings">
@@ -100,6 +95,81 @@
 				</div>
 				<div class="pure-u-1 pure-u-md-1-2">
 					<div class="l-box">
+						<h3 class="if-head">Feeder settings</h3>
+						<p>Set the schedule of feeding.</p>
+						<p>
+							<form name="config" id="frm_sch" class="pure-form pure-form-stacked">
+								<fieldset>
+									<legend>Full amount of food</legend>
+									<div class="pure-g">
+										<div class="pure-u-1 pure-u-md-1-1">
+											<input id="full_amount" class="pure-u-22-24" type="text" placeholder="30">
+										</div>
+									</div>
+									<legend>Scheduler</legend>
+									<div class="pure-g">
+										<div class="pure-u-1 pure-u-md-1-1">
+											<input id="enable" value="1" type="checkbox"> Enable
+										</div>
+									</div>
+									<legend>Feed time 1</legend>
+									<div class="pure-g">
+										<div class="pure-u-1 pure-u-md-1-5">
+											Time:
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft1_h" class="pure-u-22-24" type="text" placeholder="hour">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft1_m" class="pure-u-22-24" type="text" placeholder="min">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											Rotation:
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft1_r" class="pure-u-22-24" type="text" placeholder="rotation">
+										</div>
+									</div>
+									<legend>Feed time 2</legend>
+									<div class="pure-g">
+										<div class="pure-u-1 pure-u-md-1-5">
+											Time:
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft2_h" class="pure-u-22-24" type="text" placeholder="hour">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft2_m" class="pure-u-22-24" type="text" placeholder="min">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											Rotation:
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft2_r" class="pure-u-22-24" type="text" placeholder="rotation">
+										</div>
+									</div>
+									<legend>Feed time 3</legend>
+									<div class="pure-g">
+										<div class="pure-u-1 pure-u-md-1-5">
+											Time:
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft3_h" class="pure-u-22-24" type="text" placeholder="hour">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft3_m" class="pure-u-22-24" type="text" placeholder="min">
+										</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											Rotation:</div>
+										<div class="pure-u-1 pure-u-md-1-5">
+											<input id="ft3_r" class="pure-u-22-24" type="text" placeholder="rotation">
+										</div>
+									</div>
+
+									<button id="sch_sub" type="submit" class="pure-button pure-button-primary">Submit</button>
+								</fieldset>
+							</form>
+						</p>
 					</div>
 				</div>
 <!--				<div class="pure-u-1 pure-u-md-1-2">
@@ -181,7 +251,28 @@
 					read, "json");
 				//$('#conf_sub').prop('disabled', true);
 				return false;
-			});
+		});
+
+		$('form#frm_sch').submit(
+			function (ev) {
+				$.post('/config',
+					"enable=" + $('#enable').prop('checked').toString()
+					+ "&full_amount=" + $('#full_amount').val()
+					+ "&ft1_h=" + $('#ft1_h').val()
+					+ "&ft1_m=" + $('#ft1_m').val()
+					+ "&ft1_r=" + $('#ft1_r').val()
+					+ "&ft2_h=" + $('#ft2_h').val()
+					+ "&ft2_m=" + $('#ft2_m').val()
+					+ "&ft2_r=" + $('#ft2_r').val()
+					+ "&ft3_h=" + $('#ft3_h').val()
+					+ "&ft3_m=" + $('#ft3_m').val()
+					+ "&ft3_r=" + $('#ft3_r').val()
+					,
+					read, "json");
+				$('#sch_sub').prop('disabled', true);
+				return false;
+		});
+
 
 		function read(json) {
 			if (json.fan_enable == "true") {
@@ -192,6 +283,21 @@
 			$('#fan_hi_limit').val(json.fan_hi_limit);
 			$('#fan_lo_limit').val(json.fan_lo_limit);
 			$('#water_level_limit').val(json.water_level_limit);
+			if (json.feeder_enable == "true") {
+				$('#feeder_enable').prop("checked", true);
+			} else {
+				$('#feeder_enable').prop("checked", false);
+			}
+			$('#full_amount').val(json.full_amount);
+			$('#ft1_h').val(json.ft1_h);
+			$('#ft1_m').val(json.ft1_m);
+			$('#ft1_r').val(json.ft1_r);
+			$('#ft2_h').val(json.ft2_h);
+			$('#ft2_m').val(json.ft2_m);
+			$('#ft2_r').val(json.ft2_r);
+			$('#ft3_h').val(json.ft3_h);
+			$('#ft3_m').val(json.ft3_m);
+			$('#ft3_r').val(json.ft3_r);
 		}
 
 		function update() {
@@ -204,6 +310,8 @@
 				$('#fv').html(json.fan_power.toString());
 				$('#wt').html(json.water_temp.toFixed(1).toString());
 				$('#wl').html(json.water_level.toFixed(0).toString());
+				$('#fs').html(json.fed.toString());
+				$('#fv').html(json.remaining.toString());
 			});
 		}
 
@@ -211,6 +319,18 @@
 			$.getJSON('/config', function (json) {
 				read(json);
 			});
+		}
+
+		function propchange(val) {
+			$('#ft1_h').prop('disabled', val);
+			$('#ft1_m').prop('disabled', val);
+			$('#ft1_r').prop('disabled', val);
+			$('#ft2_h').prop('disabled', val);
+			$('#ft2_m').prop('disabled', val);
+			$('#ft2_r').prop('disabled', val);
+			$('#ft3_h').prop('disabled', val);
+			$('#ft3_m').prop('disabled', val);
+			$('#ft3_r').prop('disabled', val);
 		}
 
 		$(function () {
